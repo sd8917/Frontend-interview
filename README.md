@@ -1,20 +1,16 @@
+## 🔥 3. Infinite Scroll List
 
-## 🔥 2. Debounced Search Input
+### 🧠 Problem
 
-## 🧠 Problem
+- Load items as user scrolls
+- Stop when no more data
+- Show loader at bottom
 
-- Create a search box that:
-- Calls API after user stops typing (300ms)
-- Cancels previous requests
-- Shows loading indicator
+🎯 Tests
 
-## 🎯 Tests
-
-- useEffect
-- useRef
-- Debouncing
-- Cleanup logic
+- IntersectionObserver
+- Pagination state
+- Performance optimization
 
 ## ⚠ Trap
-
-Calling API inside onChange directly.
+- Using scroll event listeners blindly.
