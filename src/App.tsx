@@ -1,9 +1,8 @@
 
-
-import SearchExample from "./Largelist";
-
 function App() {
-  return <SearchExample />
+  return <h1>
+    App managemangent board
+  </h1>
 }
 
 
