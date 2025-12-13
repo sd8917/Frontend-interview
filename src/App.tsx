@@ -1,8 +1,14 @@
+import MutistepForm from "./MutistepForm"
 
 function App() {
-  return <h1>
-    App managemangent board
-  </h1>
+  return <>
+    <h1>
+      App managemangent board
+    </h1>
+    <hr />
+
+    <MutistepForm />
+  </>
 }
 
 
