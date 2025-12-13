@@ -1,11 +1,4 @@
-/*
-- Create a search box that:
-- Calls API after user stops typing (300ms)
-- Cancels previous requests
-- Shows loading indicator
 
-
-*/
 
 import { useEffect, useState, useMemo } from "react"
 
@@ -18,11 +11,11 @@ const useDebounce = (searchTerm: any, delay=300) =>{
         setDebouncedValue(searchTerm);
         }, delay);
 
-        // ✅ cleanup → cancels previous timer
+        // ✅ cleanup → cancels previous timer if value changes before delay
         return () => clearTimeout(timer);
     },[searchTerm, delay])
 
-    // ✅ Memoize return value to prevent unnecessary re-renders
+    // ✅ Memoize return value to prevent unnecessary re-renders of child components
     return useMemo(() => debouncedValue, [debouncedValue])
 }
 
