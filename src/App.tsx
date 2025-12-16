@@ -1,8 +1,19 @@
-
+import { useLayoutEffect, useEffect } from "react";
 
 
 function App() {
-  return <h1> App management</h1>
+  console.log("render");
+
+  useLayoutEffect(() => {
+    console.log("layout");
+  }, []);
+
+  useEffect(() => {
+    console.log("effect");
+  }, []);
+
+  return <div />;
+
 }
 
 

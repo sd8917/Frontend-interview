@@ -581,3 +581,68 @@ Causes:
 
 
 
+
+## Why react memo is not wokrin???
+
+Same object is created by referece so it re-rennder again.
+New object created on every render
+
+```
+import {memo, useRef,useMemo, useState } from "react";
+
+
+const Child = memo(({ user }: any) => {
+  console.log("Child rendered");
+  return <div>{user.name}</div>;
+});
+
+function App() {
+  const [counter, setCounter] = useState(0);
+   const prevUserRef = useRef(null);
+
+  const user = {name: "Sudhanshu"};
+
+  const userMemoized = useMemo(() => (user), []);
+
+  console.log(
+    "New object created?",
+    prevUserRef.current !== user
+  );
+
+  (prevUserRef as any).current = user;
+
+
+  return (
+    <>
+
+      <Child user={userMemoized} />
+      {counter}
+      <button onClick={()=>setCounter(c=>c+1)}>Increasement</button>
+    </>
+  )
+}
+
+export default App
+
+
+```
+
+## 9️⃣ Cleanup bug (Memory Leak)
+
+```
+useEffect(() => {
+  window.addEventListener("resize", onResize);
+}, []);
+
+```
+
+✅ Fix
+
+```
+useEffect(() => {
+  window.addEventListener("resize", onResize);
+  return () => window.removeEventListener("resize", onResize);
+}, []);
+
+
+```
