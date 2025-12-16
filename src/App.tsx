@@ -1,10 +1,16 @@
-
-
+import { Content } from "./components/Context";
+import { Header } from "./components/Header";
+import { ThemeProvider } from "./components/ThemeContext";
+import './App.css'
 
 function App() {
-  return <h1> App management</h1>
+  return (
+    <ThemeProvider>
+      <Header />
+      <Content />
+    </ThemeProvider>
+  );
 }
-
 
 
 export default App

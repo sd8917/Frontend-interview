@@ -139,3 +139,60 @@ React creates virtual DOM representation of UI
 2. React diff it with previous tree(Reconcillation)
 3. Compute minimal updates
 4. Applies them to the real DOM via the fiber architecutre
+
+
+## handling context
+
+### 1️⃣ Create Context
+
+```
+export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+````
+
+
+### 2️⃣ Theme Provider
+```
+export function ThemeProvider({ children }: ThemeProviderProps) {
+    const [theme, setTheme] = useState<string>("light");
+
+    const toggleTheme = () => {
+        setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    };
+
+     // memoize the value object
+    const value = useMemo(() => ({ theme, toggleTheme }), [theme]);
+
+    return (
+        <ThemeContext.Provider value={value}>
+            <div
+                className={theme === "light" ? "bg-white text-black !important" : "bg-black text-white !important"}
+                style={{ minHeight: "100vh", width: "100vw" }}
+            >
+                {children}
+            </div>
+        </ThemeContext.Provider>
+    );
+}
+
+```
+
+### 3️⃣ Custom Hook (BEST PRACTICE)
+```
+export function useTheme() {
+    const context = useContext(ThemeContext);
+    console.log('context ', context);
+    if (!context) {
+        throw new Error("useTheme must be used within ThemeProvider");
+    }
+    return context;
+}
+
+```
+
+#### 4️⃣ use in componentComponents
+```
+Function yourComponent() {
+ const { theme, toggleTheme } = useTheme();
+}
+
+```
