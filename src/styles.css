@@ -1,0 +1,19 @@
+.container {
+  width: 300px;
+  margin: 40px auto;
+  font-family: sans-serif;
+}
+
+.item {
+  padding: 12px;
+  margin-bottom: 8px;
+  background: #f4f4f4;
+  border-radius: 6px;
+  cursor: grab;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.item:active {
+  cursor: grabbing;
+  background: #e0e0e0;
+}
