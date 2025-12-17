@@ -1,583 +1,193 @@
-✅ 1. React.memo
+## Reference vs Value 
 
-Prevents a component from re-rendering unless its props change.
+- Pass by value
+- Stored directly, copied indepedently
 
-```
-function Child({ count }: any) {
-  console.log("Child rendered");
-  return <div>Count: {count}</div>;
-}
-
-export default function Parent() {
-  const [a, setA] = useState(0);
-  const [b, setB] = useState(0);
-
-  return (
-    <>
-      <Child count={a} />
-      <button onClick={() => setB(b + 1)}>Update B</button>
-    </>
-  );
-}
+Primitive ,string, boolean, null, undefined, symbol, bigint
 
 
-===Update to
+## SHALLO COPY
+- Copies top-level only, nested objects remain refrenced
 
-const Child = memo(function Child({ count }: any) {
-  console.log("Child rendered");
-  return <div>Count: {count}</div>;
-});
-
-Check by clicking on update B.
+- using spread operator
 
 ```
 
-##✅ 2. useCallback
+const original = {
+    name: "Amit",
+    address: {city: "Delhi"}
+};
 
-Prevents new function creation on every render → avoids causing child re-renders.
+const copy = {...original};
 
-```
+copy.name = "Sudhanshu";
 
+console.log(" values == ", original.name);
 
+Note: Here name is not nested so both object orginal and copy has different reference to name and but in case of nested address.
+const original = {
+    name: "Amit",
+    address: {city: "Delhi"}
+};
 
-```
+const copy = {...original};
 
+copy.address.city = "Mumbai";
 
-### ✅ With useMemo
-
-Caches expensive calculations so the value isn’t recomputed unnecessarily.
-
-❌ Without useMemo — expensive computation every rende
-
-
-```
-
-function App({ items }) {
-  const expensive = useMemo(() => {
-    return items.filter(x => x.isActive);
-  }, [items]);
-
-  return <div>{expensive.length}</div>;
-}
+console.log(" values == ", original.address.city);
 
 ```
+## Deep clone (Complete copy)
+- A true deep clone:
+   - Copies all nested levels
+   - No shared references.
 
-## When not to use callback
-🔥 1. When the Child Component is NOT memoized
-
-If the child is not wrapped in React.memo, then the stable reference gives no benefit.
-
-<Child onClick={handleClick} />
-
-If Child is not memoized, it will always re-render → so useCallback is wasted.
-
-Rule:
-
-No React.memo → no need for useCallback.
-
-3. When the dependency list is large
-
-More dependencies ⇒ more work in React ⇒ slower.
-
-Example:
-
-const expensive = useCallback(() => {
-  heavyTask(a, b, c, d, e, f, g);
-}, [a, b, c, d, e, f, g]);
-
-
-This forces React to re-evaluate & compare dependencies every render.
-
-
-## Explain React Reconciliation and how it impacts performance
-
-- React uses a diffing algorithm to compare:
-  -> the previous virtual DOM tree
-  -> with the new virtual DOM tree
-
-- Key rules:
-1. Types changes - full re-mount
-  ` <div> -> <span> ` trigger unmount + mount
-2. Key changes → destroy and recreate nodes
-Especially inside lists
-
-Only updates nodes affected → fine-grained updates
-
-## 2. How does React batching work? What changed in React 18?
-
-## 3. When does React re-render a component?
-React re-render when:
-1. State changes
-2. Props changes
-3. Context value changes
-4. Parent re-render -> child re-render(if not memoized)
-
-React does NOT re-render on:
-- ref changes (useRef)
-- state mutated withour setter
-- object/array mutation withour new reference
-- memoized children when props are stable.
-
-
-## 4. Why react.memo sometime doesnt' workd
-
-Because React.memo does shallow comparison.
-
-It FAILS when:
-
-new object/array/function passed every render
-
-parent always re-renders
-
-deep object props change
-
-Fix:
-
-use stable references (useCallback, useMemo)
-
-avoid passing new object/arrays as props
-
-avoid unnecessary parent re-renders
-
-
-5. What is react render phase vs commit phase?
- Render phase
- = pure , should NOT cause side effect
- = Build virtual DOM
- = Can run multiple times(StrictMode)
- Comit Phase
- = Updates DOM
- = Runs layout effects (useLayoutEffect)
- = Runs normal effects(useEffect)
-
- ## 6. Explain useLayoutEffect vs useEffect , when to use which?
-
- == Useeffect
- - Runs after paint
- - Non-blocking
- - Good for API calls, subscription, timers
-
- == useLayoutEffect
- - Runs before browser paint
- - Blocks rendering
- - Good for 
-          - Measuring DOM
-          - syncing DOM to state
-          - avoiding flicker.
-
-
-## 7.What is concurrent Rendering
-
-
-## 6/ Explain startTransition and how it improves UX
-
-Use for non-urgent updated (like search result or filters)
-
-`
-startTransition(() => {
-  setFilteredData(data);
-});
-
-
-`
-Benefit 
-== Keep UI responsive
-== Urgent updates(typing) are not blocked
-== Prevent frame drop
-
-## 🧨 9. What are Suspense boundaries?
-
-Allows React to show fallbacks for:
-
-lazy components
-
-suspended data fetching
-
-slow resources
-
-Example:
+## Old deep clone (Not recommended)
 
 ```
-
-<Suspense fallback={<Loader />}>
-  <Dashboard />
-</Suspense>
+const deepCopy = JSON.parse(JSON.stringify(obj));
 
 ```
+## ❌ Limitations:
+Loses data - Converted to string
+Removed undefine - JSON doesnt support
+Removes functions - Ignored.
 
-Suspense improves:
+## 5️⃣ ✅ structuredClone() (Modern & BEST)
 
-perceived performance
+- 🔥 What is structuredClone?
 
-progressive loading
-
-interactivity
-
-
-## 10. How do you optimize a React app with heavy rendering
-
-- Virtualization (react-windoe, react-virtualized)
-- Memoization (useMemo, useCallback, React.memo)
-- Avoid anonymous function inline
-- Split state logically
-- Derived state --> compute lazily
-- Suspense + Lazy loading
-- Debounce & throttling
-- Use profiler API
-- Define stable keys
-- Avoide unnecessary context
-
-## 11. WHy large context re-render everything ?
-
-Because when context values changes - all consumes re-render
-
-Fix 
-split context
-Use selectors
-Use Zustand/Jotai/Recoil for granular state
-
-Lift expensive logic outside provider
-
-## 12. What happens if you mutate state directly?
-
-React cannot detect the change:
-
-state.count++   // ❌ no re-render
-
-
-Why?
-React checks reference equality, not deep equality.
-
-## 13. What’s the difference between:
-
-Controlled vs Uncontrolled components?
-
-Controlled → value controlled by state
-Uncontrolled → value stored in DOM
-
-Why controlled is better?
-
-Validation
-
-Data flow
-
-Predictability
-
-React devtools debugging
-
-## 14. Why keys are important in lists?
-
-Keys help React identify:
-
-which items changed
-
-which items moved
-
-which items were added/removed
-
-Wrong keys → wrong reconciliation → unnecessary DOM operations.
-
-Never use index unless list is static and not reorderable.
-
-
-## 15. Explain hydration in SSR.
-
-Hydration = attaching React listeners to server-rendered HTML.
-
-It:
-
-- converts static HTML → interactive React app
-
-- requires matching DOM on client and server
-
-- mismatch causes hydration warnings
-
-
-## 16. Explain the difference between useRef and useState.
-Feature	useRef	useState
-Triggers re-render?	❌ No	✔️ Yes
-Stores?	Mutable value	State value
-Use cases	DOM refs, timers, cached values	UI state
-
-## How would you improve initial load time in React??
-
-- Code splitting
-- Lazy-loading routes
-- Reduce bundle size
-- Remove unused libraries
-- Use CDN
-- Preload critical assets
-- Use image optimization
-- Minimie CSS
-- SSR + streaming
-- Use RSC(next.js)
-
-## 18. What is tree-shaking??
-Tree shaking removes unused exports during bundling
-
-Work best with:
-
-- ES module 
-- Pure functions
-- Dead code elimination
-
-## 19. How does React handles errors?
-
-```
-class ErrorBoundary extends React.Component {
-  componentDidCatch(err) {}
-}
-
+- A built-in browser & node.js API for deep cloning 
 
 
 ```
 
+const original = {
+    name : "Amit",
+    date : new Date(),
+    nested : {score: 100}
+};
 
-Catches errors in:
+const copy = structuredClone(original);
 
-render
+copy.nested.score = 200;
 
-lifecycle
+console.log("origianl ", original.nested.score);
 
-constructors
-
-Not in:
-
-event handlers
-
-async code
-
-
-## 🧨 20. How do you detect render performance issues?
-
-Use React Profiler:
-
-<Profiler id="App" onRender={callback}>
-  <App />
-</Profiler>
-
-
-Helps measure:
-
-render time
-
-wasted renders
-
-interaction delays
-
-## 21. Implement c custom debounce hook
-
-```
-function useDebounce (value, delay = 300){
-    const[debounced, setDebounced] = useState(value);
-
-
-    useEffect(()=>{
-      const t = setTimeout(() => setDebounced(value), delay)
-    }, [value])
-
-    return debounced;
-}
+Note :- Original nested object do not changes on changing in copy of the object of original.
 
 
 ```
 
-## 22. Implement a custom infinte scroll hook
+## Count number of occurencess
 
-```
+## JS common question
 
-function useInfiniteScroll(callback) {
-  const observer = useRef();
+// Map
 
-  const lastElementRef = useCallback(node => {
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) callback();
-    });
-    if (node) observer.current.observe(node);
-  }, []);
+const copy = [1,2, 3].map(x=> x*2)
 
-  return lastElementRef;
-}
+// console.log(copy)
+// ✔ returns new array
+// ❌ do NOT use for side effects
 
+// filter -> remove values
 
-```
+const filtervalue = [1, 2, 3 ,4].filter(x=> x%2 === 0); 
 
-## 20. Explain Rules of Hooks deeply
+// console.log("Filter value ", filtervalue);
 
-1. Only call hookcs
-   - inside React component
-   - or custom hook
-2. Never inside :
-   - loops 
-   - conditions
-   - nested functions
+const sum = [1, 2, 3,4].reduce((sum, x) => sum+x, 0);
 
-3. Hooks must run in same order each render
-4. Prevent inconsitent state allocation
+/*
 
-## 21 Why do keys matter in lists?
+🔥 Used for:
+sum
+count
+grouping
+flatten
+frequency map
 
-Keys:
+*/
 
-identify elements uniquely
+// console.log("Sum value ", sum)
 
-prevent unnecessary re-renders
+// includes
 
-preserve component state across moves
+let val = [1,2,3].includes(2); 
 
-fix issues like input cursor jumps
+// console.log("Find value ", val);
 
-Bad keys → performance + UI bugs.
+// VERY IMPORTANT
+// SLICE VS SPLICE
 
+//  SLICE  - non mutate
+const elemen = [1, 2 , 3, 4 ];
+const copyelemen = elemen.slice(1, 3);
+// console.log("copyelemen ", copyelemen)
+// console.log(" elemen ", elemen)
 
-## How do you profile a react app?
+// SPLICe - MUTATE ORIGINAL 
+const nums = [2, 3, 4, 5];
 
-- React DevTool  profiler
-- Performance tab
-- Flame charts
-- Web vitals
-- Why Did you render
+const tem = nums.splice(1, 5);
 
-## When to use suspense + ErrorBoundary ?
-When using
-- Dynamic imports 
-- Lazy loaded components
-- Data loading frameworks
-- Images
-- Exteram resources
+// console.log("tem ", tem); 
 
+// console.log("nums ", nums);
 
-## What is concurrent mode ?
-- Pause rendering 
-- discard outdated renders
-- avoid UI blocking
-- priortize interactions
-- use startTransition for non-urgent work
 
-## Explain StartTransitions()
-- Marks updates as non-urgent
-- User interaction stay smooth
+// sort() ⚠️ Mutates
 
-## Why do React lists sometime render slow??
-- Missing keys
-- Re-renders due to function recreation
-- heavy components
-- mutation of state
-- deeply nested structure
+[10, 2, 5].sort((a, b) =>a -b);
 
-## How do you optimize re-rendering child components?
-- React.memo 
-- useCallback
-- useMemo
-- split into granular components
-- Avoid recreating object / functions
 
-## How does react handle error?
+// Object methods
 
--- Error boundaries catch
-- render error -
-- lifecycle errors
-- effect errors
 
-But not
-- event handlers
-- async callbacks
-- server-side errors.
+// console.log(Object.keys({a:1,b:2}));
+// console.log(Object.values({a:1,b:2}));
+// console.log(Object.entries({a: 1, b: 2}));
 
-## Explain React server components (RSC)
-- Servers-sider rendering without bundling into JS
-- Fetching data on server
-- Zero client JS for server components
-- Streaming UI
-- Drastically smaller bundles.
+// 🔥 1️⃣ map vs forEach
 
+// const nums2 = [1, 2 , 3];
 
-## What is code splitting & why is it important ?
-Split  JS bundles using:
-- dynamic import
-- React.lazy
+// const a = nums2.map((x)=>{
+//     return x*2;
+// });
 
-Benefits:
-- smaller initial load
-- faster FCP
-- better Lighthouse score
+// const b = nums2.forEach(x => {
+//     console.log("for each" ,x * 2);
 
-## What is a render prop??
-- A techniqu where a components receive a function as a props that return JSX
+//   return x * 2;
+// });
 
-## 50. Difference between shallow rendering & full rendering in testing?
 
-Shallow rendering:
+// console.log("a ", a)
+// console.log('nums 2 ', nums2)
 
-- renders component without children
+// console.log('b ', b)
 
-- Fast unit tests
+// const nums3 = [1, 2 , 3, 4];
 
-Full rendering:
+// const result = nums3.splice(1, 2);
 
-- Mounts DOM
+// console.log("Num3 ", nums3);
+// console.log("result ", result);
 
-- Better for integration tests
 
-- Slower
+/// sort without comparator
 
+const sorted = [10, 2, 30].sort((a, b) => b - a);
 
-## What problem does suspense solve?
- - Lazy loading
- - Data fetching
- - Assets loading
- - SSR streaming
+console.log('Sorted ', sorted)
 
-## What happens during React commit phase ?
+// 🔥 5️⃣ filter(Boolean)
 
-## How to prevent prop drilling?
+const nums4 = [0, 1, false, 2, "", 3];
 
-- Context API
-- Redux / Zustand / Recoil
-- Custom stores with useSyncExternalStore
-- Render props
-- Composition
-
-## Explain the difference between Context API and Redux.
-Feature	Context	Redux
-- Best for	Low-frequency updates	High-frequency state changes
-- Performance	Poor (re-renders everything)	Optimized selector-based updates
-- Devtools	❌ No	✔ Yes
-- Boilerplate	low	medium
-
-## What is hydration
-= Hydration = attaching React event handlers to SSR-generated HTML
-
-Challenges
-- Mismactch erros
-- Layout shift
-- Blocking time
-- Require deterministic markup
-
-## Why is lifting stateup sometime bad
-
-
-## Why does React sometimes re-render even if props didn’t change?
-
-Causes:
-
-- Parent re-renders
-- Context updates
-- Impure components
-- New function/object references
-- Missing memoization
-
-
-
-
-
-
-
-
-
-
-
+console.log(nums4.filter(Boolean))
 
 
 
