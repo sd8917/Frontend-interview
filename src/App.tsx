@@ -1,5 +1,6 @@
 import  { useState } from "react";
 import "./styles.css";
+import DelegationExample from "./DelegationExample";
 
 const initialItems = [
   { id: 1, text: "React" },
@@ -46,7 +47,7 @@ const initialItems = [
     <div className="container">
       <h2>Drag & Drop List</h2>
 
-      {items.map((item) => (
+      {/* {items.map((item) => (
         <div
           key={item.id}                 // ✅ STABLE KEY
           draggable
@@ -57,7 +58,9 @@ const initialItems = [
         >
           {item.text}
         </div>
-      ))}
+      ))} */}
+
+      <DelegationExample />
     </div>
   );
 }
