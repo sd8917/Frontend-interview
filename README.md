@@ -1,3 +1,67 @@
+## How JavaScript Handles the Event Loop & Microtask Queue
+Javascript is single-threaded, but it handles async operations using:
+```
+Call Stack + Web APIs + Task Queues + Event Loop
+```
+
+## Core Components 
+- Call Stack
+- Executes synchronous code
+- LIFO(Last in first out)
+
+## Web API
+- Handles async work:
+- setTimeout
+- fetch
+- DOM events
+- Promise resolutions
+
+## Queue
+There are two main queues
+- Microtask Queu - Promise,
+- Macrotask queue - setTimeout, setInterval, I/O,events.
+
+## Event looks
+- Is call stack empty?
+- If yes - drain microtask
+- Then - execute one macrotask
+- Repeat.
+
+## Execution order
+- `Call Stack -> Microtasks -> Macrotask`
+
+## Basic example
+
+`
+console.log("Start")
+
+setTimeout(()=>{
+    console.log('timeout')
+}, 0)
+
+Promise.resolve().then(() => {
+  console.log("promise");
+});
+
+console.log("end");
+
+`
+
+## Microtasks inside Macrotask
+
+`
+setTimeout(()=>{
+    console.log("timeout");
+
+    Promise.resolve().then(()=>{
+        console.log("Promise inside timeout");
+    })
+
+}, 0)
+
+`
+
+
 ## Reference vs Value 
 
 - Pass by value

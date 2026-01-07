@@ -62,26 +62,93 @@
 
 // console.log(countOccurences(['a', 'b', 'a', 'c', 'b', 'a']))
 
-const arr = ['a', 'b', 'a', 'c', 'b', 'a']
+// const arr = ['a', 'b', 'a', 'c', 'b', 'a']
 
-const arrReduced = arr.reduce((acc, item)=>{
-    acc[item] = (acc[item] || 0) + 1;
-    return acc;
-}, {})
-
-console.log(arrReduced)
-
-// sorted by frq of element occuring
-// const arr1 = ["b", "b", "a", "c", "a", "b"];
-
-// const freq = arr1.reduce((acc,item)=>{
-//     acc[item] = (acc[item] || 0 ) + 1;
+// const arrReduced = arr.reduce((acc, item)=>{
+//     acc[item] = (acc[item] || 0) + 1;
 //     return acc;
-// }, {});
+// }, {})
 
-// const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]).map(([value]) => value);
+// // console.log(arrReduced)
 
-// console.log('Sorted ', sorted)
+// // sorted by frq of element occuring
+// // const arr1 = ["b", "b", "a", "c", "a", "b"];
 
-// ====
+// // const freq = arr1.reduce((acc,item)=>{
+// //     acc[item] = (acc[item] || 0 ) + 1;
+// //     return acc;
+// // }, {});
 
+// // const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]).map(([value]) => value);
+
+// // console.log('Sorted ', sorted)
+
+// // ====
+
+// async function test() {
+//     console.log("1");
+
+//         setTimeout(()=>{
+//         console.log("Setimeout");
+//     }, 0)
+
+//     await Promise.resolve().then(()=>{
+//         console.log("sudhanshu")
+//     });
+
+
+
+//     console.log("2");
+// }
+
+// console.log("3");
+
+// test();
+
+// console.log("4");
+
+// 
+// let x = 10;
+
+// function test(y = ++x) {
+//   console.log(y);
+// }
+
+// test();
+// test();
+
+
+
+// Promise.resolve()
+//     .then(() => {
+//         console.log(1);
+//         return Promise.resolve()
+//         .catch(() => {
+//             throw new Error('Something went wrong')
+//         })
+//     })
+//     .then(console.log)
+//     .catch(console.log)
+
+// async function test() {
+//   for (let i = 0; i < 3; i++) {
+//     await Promise.resolve(i);
+//     console.log(i);
+//   }
+// }
+
+
+// console.log("done");
+// test();
+
+
+// setTimeout(() => console.log("timeout"));
+
+// Promise.resolve().then(() => console.log("promise"));
+
+// (async () => {
+//     await Promise.resolve();
+//   console.log("async");
+// })();
+
+// console.log("end");
