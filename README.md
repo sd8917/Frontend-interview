@@ -140,3 +140,19 @@ Keep state closest to component that needs it
 
 ![alt text](image.png)
 
+
+
+##
+
+Rendering & Performance 
+What causes re-renders in React? 
+How to prevent unnecessary re-renders?
+ What is React.memo? 
+ How does reconciliation work
+ ? What is batching in React 18?
+  What is Strict Mode? 
+  Why does React render twice in dev?
+
+![alt text](image-1.png)
+
+![alt text](image-2.png)
