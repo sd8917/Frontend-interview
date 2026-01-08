@@ -1,3 +1,15 @@
+/* Light theme */
+[data-theme="light"] body {
+  background-color: white;
+  color: black;
+}
+
+/* Dark theme */
+[data-theme="dark"] body {
+  background-color: black;
+  color: white;
+}
+
 .container {
   width: 300px;
   margin: 40px auto;
@@ -13,7 +25,16 @@
   transition: transform 0.2s ease, background 0.2s ease;
 }
 
+[data-theme="dark"] .item {
+  background: #333;
+  color: white;
+}
+
 .item:active {
   cursor: grabbing;
   background: #e0e0e0;
+}
+
+[data-theme="dark"] .item:active {
+  background: #555;
 }
