@@ -184,3 +184,15 @@ Custom Hooks – when and why?
 ![alt text](image-3.png)
 
 ![alt text](image-4.png)
+
+##
+Performance & Optimization 
+How to optimize a large React app? 
+Code splitting in React
+ Lazy loading vs dynamic imports 
+ Tree shaking – does React support it? 
+ How to optimize long lists? 
+ Virtualization (react-window / react-virtualized) 
+ How to measure performance in React?
+
+![alt text](image-5.png)
