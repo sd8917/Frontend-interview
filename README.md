@@ -156,3 +156,31 @@ How to prevent unnecessary re-renders?
 ![alt text](image-1.png)
 
 ![alt text](image-2.png)
+
+
+##
+Hooks
+
+What are Hooks? Why were they introduced?
+
+Rules of Hooks
+
+Difference between useEffect, useLayoutEffect
+
+How does dependency array work in useEffect?
+
+What happens if you omit dependency array?
+
+How to cleanup effects?
+
+Difference between useRef and useState
+
+When to use useCallback vs useMemo
+
+How does useReducer differ from useState?
+
+Custom Hooks – when and why?
+
+![alt text](image-3.png)
+
+![alt text](image-4.png)
