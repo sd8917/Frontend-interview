@@ -11,8 +11,9 @@ const TodoApp = () => {
     const [taskName, setTaskName] = useState('');
     const [showCompleted, setShowCompleted] = useState(false);
 
-    // Add new task
+    // Add new taske
     const submitHandler = () => {
+        
         if (!taskName.trim()) return; // avoid empty tasks
         const newTask: Task = {
             id: Date.now().toString(),
@@ -27,7 +28,7 @@ const TodoApp = () => {
     const markTaskDone = (id: string) => {
         setTasks(prev =>
             prev.map(task =>
-                task.id === id ? { ...task, isCompleted: !task.isCompleted } : task
+                task.id === id ? { ...task, isCompleted: task.isCompleted ? true : !task.isCompleted } : task
             )
         );
     };
@@ -38,7 +39,7 @@ const TodoApp = () => {
         : tasks;
 
     return (
-        <div style={{ padding: '20px', maxWidth: '400px', margin: 'auto' }}>
+        <div style={{ padding: '20px', minWidth: "100%", margin: 'auto', border : "2px solid orange"}}>
 
             <h2>Todo App</h2>
 
@@ -64,7 +65,12 @@ const TodoApp = () => {
                     onChange={e => setTaskName(e.target.value)}
                     style={{ flex: 1 }}
                 />
-                <button onClick={submitHandler}>Add</button>
+                <button  onClick={submitHandler} onKeyDownCapture={(e) => {
+                   
+    if (e.key === 'Enter') {
+      submitHandler();
+    }
+  }}>Add</button>
             </div>
 
             <div style={{ marginTop: '20px' }}>
