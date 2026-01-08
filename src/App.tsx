@@ -1,5 +1,6 @@
 
 import Autocomplete from "./components/AutoComplete"
+import EventVisualDemo from "./components/EventDemo";
 import MemoImplemen from "./components/MemoImplemen"
 import UseCallback from "./components/UseCallback"
 import { ThemeContextProvider } from "./hooks/ContextProvide"
@@ -9,9 +10,10 @@ const App = () => {
 
   return (
     <>
-      <ThemeContextProvider>
+      {/* <ThemeContextProvider>
         <MemoImplemen />
-      </ThemeContextProvider>
+      </ThemeContextProvider> */}
+      <EventVisualDemo />
 
     </>
   )

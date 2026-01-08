@@ -48,3 +48,95 @@ Build shopping cart
 
 Build protected routes
 
+
+```
+                      ┌─────────────────────────────┐
+                      │        App / Root           │
+                      │   (can hold top-level state)│
+                      └─────────────┬──────────────┘
+                                    │
+                      ┌─────────────┴──────────────┐
+                      │       Lifting State Up     │
+                      │ Parent holds state shared  │
+                      │ between multiple children  │
+                      └─────────────┬──────────────┘
+                                    │
+                   ┌────────────────┴─────────────┐
+                   │ Shared State passed as props │
+                   │ to controlled children       │
+                   └─────────────┬───────────────┘
+                                 │
+        ┌───────────────┐       ┌───────────────┐
+        │ Child 1       │       │ Child 2       │
+        │ Controlled    │       │ Controlled    │
+        │ input / UI    │       │ Preview / UI  │
+        └───────────────┘       └───────────────┘
+
+───────────────────────────────────────────────────────────
+        Compound Components Pattern
+───────────────────────────────────────────────────────────
+┌───────────────┐
+│ Parent        │  <-- holds internal state (active tab, open dropdown)
+│ Tabs / Accordion│
+└───────┬───────┘
+        │
+┌───────┴───────┐
+│ Tab / Panel 1 │  <-- receives props from parent (isActive, handlers)
+└───────────────┘
+┌───────────────┐
+│ Tab / Panel 2 │
+└───────────────┘
+
+───────────────────────────────────────────────────────────
+        Render Props Pattern
+───────────────────────────────────────────────────────────
+┌────────────────────────────┐
+│ MouseTracker / DataFetcher │  <-- holds logic & state
+│ children = function(pos)   │
+└─────────────┬──────────────┘
+              │
+┌─────────────┴──────────────┐
+│ Custom UI based on state    │  <-- flexible render via function
+└────────────────────────────┘
+
+───────────────────────────────────────────────────────────
+        Controlled vs Uncontrolled
+───────────────────────────────────────────────────────────
+Controlled: React owns state
+┌─────────────┐
+│ Input       │  value={state} onChange={setState}
+└─────────────┘
+
+Uncontrolled: DOM owns state
+┌─────────────┐
+│ Input       │  ref.current.value
+└─────────────┘
+
+───────────────────────────────────────────────────────────
+        State Colocation
+───────────────────────────────────────────────────────────
+Keep state closest to component that needs it
+┌─────────────┐
+│ Component A │  <-- holds own state
+└─────────────┘
+┌─────────────┐
+│ Component B │  <-- unrelated, no re-renders
+└─────────────┘
+
+───────────────────────────────────────────────────────────
+        Container–Presentational
+───────────────────────────────────────────────────────────
+┌─────────────┐
+│ Container   │  fetches data, holds state, passes props
+└─────┬───────┘
+      │
+┌─────┴───────┐
+│ Presentational │ renders UI based on props only
+└───────────────┘
+
+
+
+```
+
+![alt text](image.png)
+
