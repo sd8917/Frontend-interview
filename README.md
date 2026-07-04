@@ -568,6 +568,10 @@ Causes:
 - New function/object references
 - Missing memoization
 
+## React Portal ::
+
+React Portal allows rendering children into a DOM node outside the parent hierarchy while preserving React’s event bubbling.
+
 
 
 
