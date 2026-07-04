@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Modal from "./Modal";
 import SearchExample from "./SearchExample";
+import InfiniteScroll from "./InfiniteScrol";
 
 
 function App() {
@@ -17,7 +18,9 @@ function App() {
         </Modal>
       )}
 
-      <SearchExample />
+      {/* <SearchExample /> */}
+
+      <InfiniteScroll />
     </>
   );
 }

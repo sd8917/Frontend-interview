@@ -1,4 +1,5 @@
 ## memo
+
 React.memo is a highorder component that prevent unnecessary re-render of a components if props haven't changes (shallow comparison).
 
 Now:
